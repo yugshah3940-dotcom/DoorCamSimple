@@ -2,7 +2,8 @@ name: Build APK
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -14,23 +15,28 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Set up JDK 17
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
-        distribution: 'temurin'
+        distribution: 'zulu'
         java-version: '17'
+        cache: 'gradle'
 
-    - name: Install Gradle
-      run: |
-        wget https://services.gradle.org/distributions/gradle-8.3-bin.zip
-        unzip -qq gradle-8.3-bin.zip
-        echo "$PWD/gradle-8.3/bin" >> $GITHUB_PATH
+    - name: Set up Android SDK
+      uses: reactivecircus/android-emulator-runner@v2
+      with:
+        api-level: 30
+        target: google_apis
+        arch: x86_64
+        profile: Pixel_3a_API_30_x86_64
+        force-avd-creation: true
 
     - name: Build APK
-      run: gradle -g $HOME/.gradle assembleRelease --stacktrace
+      run: ./gradlew assembleRelease
 
     - name: Upload APK
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: DoorCamSimple-APK
+        name: app-release.apk
         path: app/build/outputs/apk/release/app-release.apk
+
 
