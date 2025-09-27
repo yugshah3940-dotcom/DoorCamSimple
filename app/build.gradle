@@ -15,10 +15,12 @@ android {
         versionName "1.0"
     }
     buildTypes {
-        release {
-            isMinifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
+    release {
+        minifyEnabled false   // ✅ correct
+        proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+}
+
     }
     kotlinOptions { jvmTarget = '1.8' }
     compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
